@@ -73,7 +73,23 @@ export const useStateStore = create<State>()((set) => ({
 export function useFunctions() {
 	const state = useStateStore();
 	const [updateCookiesTrigger, setUpdateCookiesTrigger] = useState(0);
-	useEffect(() => update_cookies(), [updateCookiesTrigger]);
+	useEffect(() => {
+		if (state.seed) {
+			update_cookies();
+		}
+	}, [updateCookiesTrigger]);
+
+	useEffect(() => {
+		const localSaveString = localStorage.getItem("save_string");
+		if (localSaveString) {
+			state.update(() => ({ save_string: localSaveString }));
+			load_game(localSaveString);
+		}
+	}, []);
+
+	useEffect(() => {
+		localStorage.setItem("save_string", state.save_string);
+	}, [state.save_string]);
 
 	function triggerUpdateCookies() {
 		setUpdateCookiesTrigger((val) => val + 1);
