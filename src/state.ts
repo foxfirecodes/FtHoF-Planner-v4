@@ -85,7 +85,7 @@ export function useFunctions() {
 		update_cookies();
 	}
 
-	function load_game(str: any) {
+	function load_game(str?: any) {
 		if (!str) {
 			str = state.save_string;
 		}
@@ -121,13 +121,13 @@ export function useFunctions() {
 
 	function update_cookies() {
 		const cookies: CookieSet[] = [];
-		let bsIndices = [];
-		let skipIndices = [];
+		const bsIndices = [];
+		const skipIndices = [];
 		for (let i = 0; i < state.lookahead; i++) {
-			let cookie1 = check_cookies(state.spellsCastTotal + i, "", false);
-			let cookie2 = check_cookies(state.spellsCastTotal + i, "", true);
-			let cookie3 = check_cookies(state.spellsCastTotal + i, "", true);
-			let gambler = check_gambler(state.spellsCastTotal + i);
+			const cookie1 = check_cookies(state.spellsCastTotal + i, "", false);
+			const cookie2 = check_cookies(state.spellsCastTotal + i, "", true);
+			const cookie3 = check_cookies(state.spellsCastTotal + i, "", true);
+			const gambler = check_gambler(state.spellsCastTotal + i);
 			cookies.push([
 				cookie1,
 				cookie2,
@@ -204,15 +204,15 @@ export function useFunctions() {
 		let firstStart = -1;
 
 		for (let i = 0; i + combo_length <= bsIndices.length; i++) {
-			let seqStart = bsIndices[i];
-			let seqEnd = bsIndices[i + combo_length - 1];
-			let baseDistance = seqEnd - seqStart + 1;
+			const seqStart = bsIndices[i];
+			const seqEnd = bsIndices[i + combo_length - 1];
+			const baseDistance = seqEnd - seqStart + 1;
 
-			let skips = skipIndices.filter(
+			const skips = skipIndices.filter(
 				(idx) => idx > seqStart && idx < seqEnd && !bsIndices.includes(idx),
 			);
 
-			let distance = baseDistance - skips.length;
+			const distance = baseDistance - skips.length;
 			if (firstStart == -1 && distance <= combo_length + max_spread) {
 				firstStart = seqStart;
 				firstDistance = distance;
@@ -242,19 +242,19 @@ export function useFunctions() {
 	function check_gambler(spellsCast: number): GamblerSpell {
 		Math.seedrandom(state.seed + "/" + spellsCast);
 
-		let spells = [];
+		const spells = [];
 		for (const [key, spell] of Object.entries(SPELLS)) {
 			if (key != "gambler's fever dream") spells.push(spell);
 		}
 
-		var gfdSpell = choose(spells);
+		const gfdSpell = choose(spells);
 		//simplifying the below cause this isn't patched yet afaict and i'll never be playing with diminished ineptitutde backfire
-		var gfdBackfire = 0.5; /*M.getFailChance(gfdSpell);
+		const gfdBackfire = 0.5; /*M.getFailChance(gfdSpell);
     
     if(FortuneCookie.detectKUGamblerPatch()) gfdBackfire *= 2;
     else gfdBackfire = Math.max(gfdBackfire, 0.5);*/
 
-		let gamblerSpell: Partial<GamblerSpell> = {};
+		const gamblerSpell: Partial<GamblerSpell> = {};
 		gamblerSpell.type = gfdSpell.name;
 		gamblerSpell.hasBs = false;
 		gamblerSpell.hasEf = false;
@@ -320,7 +320,7 @@ export function useFunctions() {
 		forcedGold = false,
 	): Cookie {
 		Math.seedrandom(state.seed + "/" + spells);
-		let roll = Math.random();
+		const roll = Math.random();
 		if (
 			forcedGold !== false &&
 			(forcedGold || roll < 1 - 0.15 * (state.on_screen_cookies + 1))
@@ -342,7 +342,7 @@ export function useFunctions() {
 			if (Math.random() < 0.25) choices.push("Building Special");
 			if (Math.random() < 0.15) choices = ["Cookie Storm Drop"];
 			if (Math.random() < 0.0001) choices.push("Free Sugar Lump");
-			let cookie: Partial<Cookie> = {};
+			const cookie: Partial<Cookie> = {};
 			cookie.wrath = false;
 			cookie.type = choose(choices);
 			if (cookie.type == "Frenzy")
@@ -382,7 +382,7 @@ export function useFunctions() {
 			if (Math.random() < 0.1) choices.push("Cursed Finger", "Elder Frenzy");
 			if (Math.random() < 0.003) choices.push("Free Sugar Lump");
 			if (Math.random() < 0.1) choices = ["Blab"];
-			let cookie: Partial<Cookie> = {};
+			const cookie: Partial<Cookie> = {};
 			cookie.wrath = true;
 			cookie.type = choose(choices);
 			if (cookie.type == "Clot")
@@ -405,5 +405,5 @@ export function useFunctions() {
 		}
 	}
 
-	return { load_more, cast_spell, load_game };
+	return { load_more, cast_spell, load_game, update_cookies };
 }
