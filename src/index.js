@@ -1,75 +1,4 @@
-import { Base64 } from "./base64.js";
-
-(function (a, b, c, d, e, f) {
-	function k(a) {
-		var b,
-			c = a.length,
-			e = this,
-			f = 0,
-			g = (e.i = e.j = 0),
-			h = (e.S = []);
-		for (c || (a = [c++]); d > f; ) h[f] = f++;
-		for (f = 0; d > f; f++)
-			(h[f] = h[(g = j & (g + a[f % c] + (b = h[f])))]), (h[g] = b);
-		(e.g = function (a) {
-			for (var b, c = 0, f = e.i, g = e.j, h = e.S; a--; )
-				(b = h[(f = j & (f + 1))]),
-					(c = c * d + h[j & ((h[f] = h[(g = j & (g + b))]) + (h[g] = b))]);
-			return (e.i = f), (e.j = g), c;
-		})(d);
-	}
-
-	function l(a, b) {
-		var e,
-			c = [],
-			d = (typeof a)[0];
-		if (b && "o" == d)
-			for (e in a)
-				try {
-					c.push(l(a[e], b - 1));
-				} catch (f) {}
-		return c.length ? c : "s" == d ? a : a + "\0";
-	}
-
-	function m(a, b) {
-		for (var d, c = a + "", e = 0; c.length > e; )
-			b[j & e] = j & ((d ^= 19 * b[j & e]) + c.charCodeAt(e++));
-		return o(b);
-	}
-
-	function n(c) {
-		try {
-			return a.crypto.getRandomValues((c = new Uint8Array(d))), o(c);
-		} catch (e) {
-			return [+new Date(), a, a.navigator.plugins, a.screen, o(b)];
-		}
-	}
-
-	function o(a) {
-		return String.fromCharCode.apply(0, a);
-	}
-
-	var g = c.pow(d, e),
-		h = c.pow(2, f),
-		i = 2 * h,
-		j = d - 1;
-	(c.seedrandom = function (a, f) {
-		var j = [],
-			p = m(l(f ? [a, o(b)] : 0 in arguments ? a : n(), 3), j),
-			q = new k(j);
-		return (
-			m(o(q.S), b),
-			(c.random = function () {
-				for (var a = q.g(e), b = g, c = 0; h > a; )
-					(a = (a + c) * d), (b *= d), (c = q.g(1));
-				for (; a >= i; ) (a /= 2), (b /= 2), (c >>>= 1);
-				return (a + c) / b;
-			}),
-			p
-		);
-	}),
-		m(c.random(), b);
-})(this, [], Math, 256, 6, 52);
+import "./math-ext.ts";
 
 function choose(arr) {
 	return arr[Math.floor(Math.random() * arr.length)];
@@ -105,10 +34,11 @@ app.controller("myCtrl", function ($scope) {
 		if (!str) {
 			str = $scope.save_string;
 		}
+		str = decodeURIComponent(str);
 		str = str.split("!END!")[0];
-		str = Base64.decode(str);
+		str = atob(str);
 		str = str.split("|");
-		spl = str[2].split(";");
+		let spl = str[2].split(";");
 		$scope.seed = spl[4];
 		console.log($scope.seed);
 
@@ -131,14 +61,14 @@ app.controller("myCtrl", function ($scope) {
 
 	$scope.update_cookies = function () {
 		$scope.cookies = [];
-		bsIndices = [];
-		skipIndices = [];
-		for (i = 0; i < $scope.lookahead; i++) {
+		let bsIndices = [];
+		let skipIndices = [];
+		for (let i = 0; i < $scope.lookahead; i++) {
 			$scope.cookies.push([]);
-			cookie1 = check_cookies($scope.spellsCastTotal + i, "", false);
-			cookie2 = check_cookies($scope.spellsCastTotal + i, "", true);
-			cookie3 = check_cookies($scope.spellsCastTotal + i, "", true);
-			gambler = check_gambler($scope.spellsCastTotal + i);
+			let cookie1 = check_cookies($scope.spellsCastTotal + i, "", false);
+			let cookie2 = check_cookies($scope.spellsCastTotal + i, "", true);
+			let cookie3 = check_cookies($scope.spellsCastTotal + i, "", true);
+			let gambler = check_gambler($scope.spellsCastTotal + i);
 			$scope.cookies[i].push(cookie1);
 			$scope.cookies[i].push(cookie2);
 			$scope.cookies[i].push(cookie2);
@@ -173,7 +103,7 @@ app.controller("myCtrl", function ($scope) {
 		$scope.combos = {};
 
 		for (
-			combo_length = $scope.min_combo_length;
+			let combo_length = $scope.min_combo_length;
 			combo_length <= $scope.max_combo_length;
 			combo_length++
 		) {
@@ -210,7 +140,7 @@ app.controller("myCtrl", function ($scope) {
 		let firstDistance = 10000000;
 		let firstStart = -1;
 
-		for (i = 0; i + combo_length <= bsIndices.length; i++) {
+		for (let i = 0; i + combo_length <= bsIndices.length; i++) {
 			let seqStart = bsIndices[i];
 			let seqEnd = bsIndices[i + combo_length - 1];
 			let baseDistance = seqEnd - seqStart + 1;
@@ -253,7 +183,7 @@ app.controller("myCtrl", function ($scope) {
 	function check_gambler(spellsCast) {
 		Math.seedrandom($scope.seed + "/" + spellsCast);
 
-		spells = [];
+		let spells = [];
 		for (var i in $scope.spells) {
 			if (i != "gambler's fever dream") spells.push($scope.spells[i]);
 		}
@@ -265,7 +195,7 @@ app.controller("myCtrl", function ($scope) {
     if(FortuneCookie.detectKUGamblerPatch()) gfdBackfire *= 2;
     else gfdBackfire = Math.max(gfdBackfire, 0.5);*/
 
-		gamblerSpell = {};
+		let gamblerSpell = {};
 		gamblerSpell.type = gfdSpell.name;
 		gamblerSpell.hasBs = false;
 		gamblerSpell.hasEf = false;
@@ -326,7 +256,7 @@ app.controller("myCtrl", function ($scope) {
 
 	function check_cookies(spells, season, chime, forcedGold) {
 		Math.seedrandom($scope.seed + "/" + spells);
-		roll = Math.random();
+		let roll = Math.random();
 		if (
 			forcedGold !== false &&
 			(forcedGold || roll < 1 - 0.15 * ($scope.on_screen_cookies + 1))
@@ -348,7 +278,7 @@ app.controller("myCtrl", function ($scope) {
 			if (Math.random() < 0.25) choices.push("Building Special");
 			if (Math.random() < 0.15) choices = ["Cookie Storm Drop"];
 			if (Math.random() < 0.0001) choices.push("Free Sugar Lump");
-			cookie = {};
+			let cookie = {};
 			cookie.wrath = false;
 			cookie.type = choose(choices);
 			if (cookie.type == "Frenzy")
@@ -388,7 +318,7 @@ app.controller("myCtrl", function ($scope) {
 			if (Math.random() < 0.1) choices.push("Cursed Finger", "Elder Frenzy");
 			if (Math.random() < 0.003) choices.push("Free Sugar Lump");
 			if (Math.random() < 0.1) choices = ["Blab"];
-			cookie = {};
+			let cookie = {};
 			cookie.wrath = true;
 			cookie.type = choose(choices);
 			if (cookie.type == "Clot")
@@ -428,19 +358,19 @@ app.controller("myCtrl", function ($scope) {
 				Game.Notify(
 					"Conjure baked goods!",
 					"You magic <b>" +
-						Beautify(val) +
-						" cookie" +
-						(val == 1 ? "" : "s") +
-						"</b> out of thin air.",
+					Beautify(val) +
+					" cookie" +
+					(val == 1 ? "" : "s") +
+					"</b> out of thin air.",
 					[21, 11],
 					6,
 				);
 				Game.Popup(
 					'<div style="font-size:80%;">+' +
-						Beautify(val) +
-						" cookie" +
-						(val == 1 ? "" : "s") +
-						"!</div>",
+					Beautify(val) +
+					" cookie" +
+					(val == 1 ? "" : "s") +
+					"!</div>",
 					Game.mouseX,
 					Game.mouseY,
 				);
@@ -453,10 +383,10 @@ app.controller("myCtrl", function ($scope) {
 				Game.Notify(buff.name, buff.desc, buff.icon, 6);
 				Game.Popup(
 					'<div style="font-size:80%;">Backfire!<br>Summoning failed! Lost ' +
-						Beautify(val) +
-						" cookie" +
-						(val == 1 ? "" : "s") +
-						"!</div>",
+					Beautify(val) +
+					" cookie" +
+					(val == 1 ? "" : "s") +
+					"!</div>",
 					Game.mouseX,
 					Game.mouseY,
 				);
@@ -599,8 +529,8 @@ app.controller("myCtrl", function ($scope) {
 				building.buyFree(1);
 				Game.Popup(
 					'<div style="font-size:80%;">A new ' +
-						building.single +
-						"<br>bursts out of the ground.</div>",
+					building.single +
+					"<br>bursts out of the ground.</div>",
 					Game.mouseX,
 					Game.mouseY,
 				);
@@ -622,8 +552,8 @@ app.controller("myCtrl", function ($scope) {
 				building.sacrifice(1);
 				Game.Popup(
 					'<div style="font-size:80%;">Backfire!<br>One of your ' +
-						building.plural +
-						"<br>disappears in a puff of smoke.</div>",
+					building.plural +
+					"<br>disappears in a puff of smoke.</div>",
 					Game.mouseX,
 					Game.mouseY,
 				);
@@ -733,10 +663,10 @@ app.controller("myCtrl", function ($scope) {
 				);
 				Game.Popup(
 					'<div style="font-size:80%;">Casting ' +
-						spell.name +
-						"<br>for " +
-						Beautify(cost) +
-						" magic...</div>",
+					spell.name +
+					"<br>for " +
+					Beautify(cost) +
+					" magic...</div>",
 					Game.mouseX,
 					Game.mouseY,
 				);
