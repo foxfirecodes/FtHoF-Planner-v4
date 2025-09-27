@@ -377,8 +377,8 @@ function App() {
 
 				<hr />
 
-				<div>
-					<div>
+				<div className="table">
+					<div className="table-col">
 						<div>
 							<div className="md-toolbar-tools">
 								<h1>Spell #</h1>
@@ -408,8 +408,7 @@ function App() {
 							</ul>
 						</div>
 					</div>
-					<hr />
-					<div>
+					<div className="table-col">
 						<div className="md-hue-3">
 							<div className="md-toolbar-tools">
 								<h1>No Change</h1>
@@ -441,8 +440,7 @@ function App() {
 							</ul>
 						</div>
 					</div>
-					<hr />
-					<div style={{ display: "block" }} id="content-3">
+					<div className="table-col">
 						<div className="md-hue-3">
 							<div className="md-toolbar-tools">
 								<h1>One Change</h1>
@@ -485,11 +483,10 @@ function App() {
 							</ul>
 						</div>
 					</div>
-					<hr />
-					<div>
+					<div className="table-col">
 						<div className="md-hue-3">
 							<div className="md-toolbar-tools">
-								<span>Gambler's Dream</span>
+								<h1>Gambler's Dream</h1>
 							</div>
 						</div>
 						<div>

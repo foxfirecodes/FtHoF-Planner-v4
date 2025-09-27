@@ -1,0 +1,28 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+li {
+	list-style-type: none;
+}
+
+.table {
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: 1fr;
+}
+
+.table-col {
+	width: 100%;
+	border-left: 1px solid gray;
+	border-right: 1px solid gray;
+	& > :nth-child(1) {
+		height: 100px;
+	}
+	li {
+		border-bottom: 1px solid gray;
+		height: 150px;
+	}
+}
