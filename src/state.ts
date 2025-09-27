@@ -2,6 +2,7 @@ import "./math-ext.ts";
 import { create } from "zustand";
 import { choose } from "./utils.ts";
 import { SPELLS } from "./spells.ts";
+import { useEffect, useState } from "react";
 
 interface Cookie {
 	wrath: boolean;
@@ -71,10 +72,16 @@ export const useStateStore = create<State>()((set) => ({
 
 export function useFunctions() {
 	const state = useStateStore();
+	const [updateCookiesTrigger, setUpdateCookiesTrigger] = useState(0);
+	useEffect(() => update_cookies(), [updateCookiesTrigger]);
+
+	function triggerUpdateCookies() {
+		setUpdateCookiesTrigger((val) => val + 1);
+	}
 
 	function load_more() {
 		state.update((curr) => ({ lookahead: curr.lookahead + 50 }));
-		update_cookies();
+		triggerUpdateCookies();
 	}
 
 	function cast_spell() {
@@ -82,7 +89,7 @@ export function useFunctions() {
 			spellsCastThisAscension: curr.spellsCastThisAscension + 1,
 			spellsCastTotal: curr.spellsCastTotal + 1,
 		}));
-		update_cookies();
+		triggerUpdateCookies();
 	}
 
 	function load_game(str?: any) {
@@ -116,7 +123,7 @@ export function useFunctions() {
 			spellsCastThisAscension,
 		}));
 
-		update_cookies();
+		triggerUpdateCookies();
 	}
 
 	function update_cookies() {
@@ -317,7 +324,7 @@ export function useFunctions() {
 		spells: number,
 		season: string,
 		chime: boolean,
-		forcedGold = false,
+		forcedGold?: boolean,
 	): Cookie {
 		Math.seedrandom(state.seed + "/" + spells);
 		const roll = Math.random();
@@ -334,7 +341,7 @@ export function useFunctions() {
 			Math.random();
 			/**/
 
-			var choices = [];
+			let choices = [];
 			choices.push("Frenzy", "Lucky");
 			if (!state.dragonflight) choices.push("Click Frenzy");
 			if (Math.random() < 0.1)
@@ -377,7 +384,7 @@ export function useFunctions() {
 			Math.random();
 			/**/
 
-			var choices = [];
+			let choices = [];
 			choices.push("Clot", "Ruin");
 			if (Math.random() < 0.1) choices.push("Cursed Finger", "Elder Frenzy");
 			if (Math.random() < 0.003) choices.push("Free Sugar Lump");
@@ -405,5 +412,5 @@ export function useFunctions() {
 		}
 	}
 
-	return { load_more, cast_spell, load_game, update_cookies };
+	return { load_more, cast_spell, load_game, update_cookies, check_cookies };
 }

@@ -2,36 +2,38 @@ import "./App.css";
 import { useFunctions, useStateStore } from "./state";
 
 function App() {
-	const state = useStateStore();
-	const functions = useFunctions();
+    const state = useStateStore();
+    const functions = useFunctions();
 
-	return (
-		<main>
-			<div className="md-toolbar-tools">
-				<h1>
-					<span>Cookie Clicker FtHoF Planner v4</span>
-				</h1>
-			</div>
-			<div className="content">
-				<div>
-					<div>
-						<label>Save Code</label>
-						<input
-							value={state.save_string}
-							onChange={(e) =>
-								state.update(() => ({ save_string: e.target.value }))
-							}
-						/>
-					</div>
-					<button
-						className="md-raised md-primary"
-						onClick={() => functions.load_game()}
-					>
-						Import Save
-					</button>
-				</div>
+    window.APP = { state, functions };
 
-				{/* 
+    return (
+        <main>
+            <div className="md-toolbar-tools">
+                <h1>
+                    <span>Cookie Clicker FtHoF Planner v4</span>
+                </h1>
+            </div>
+            <div className="content">
+                <div>
+                    <div>
+                        <label>Save Code</label>
+                        <input
+                            value={state.save_string}
+                            onChange={(e) =>
+                                state.update(() => ({ save_string: e.target.value }))
+                            }
+                        />
+                    </div>
+                    <button
+                        className="md-raised md-primary"
+                        onClick={() => functions.load_game()}
+                    >
+                        Import Save
+                    </button>
+                </div>
+
+                {/* 
         <p></p><b>Based on FtHoF planner v1, v2, v3 by RebelKeithy, Skeezy and Eminenti. Huge thanks to them for
         creating such
         a helpful tool.</b></br>
@@ -204,151 +206,151 @@ function App() {
 
         */}
 
-				<hr />
+                <hr />
 
-				{Object.keys(state.combos).length > 0 ? (
-					<ul>
-						{Object.values(state.combos).map((combo, i) => (
-							<li className="combo-listitem">
-								<b>{i + state.min_combo_length}x Combo</b>
-								{combo.shortest.idx === -1 ? (
-									<ul>
-										<li>No combo of this length</li>
-									</ul>
-								) : (
-									<ul>
-										{combo.first.idx === -1 ? (
-											<li>
-												No combo of this length with spread &lt;={" "}
-												{state.max_spread}
-											</li>
-										) : (
-											<li>
-												<a href={`#${combo.first.idx}`}>Earliest:</a> Length
-												{combo.first.length}; spread{" "}
-												{combo.first.length - (i + state.min_combo_length)};
-												starting at
-												<a href={`#${combo.first.idx}`}>
-													spell #{combo.first.idx + 1}
-												</a>
-											</li>
-										)}
-										<li>
-											<a href={`#${combo.shortest.idx}`}>Shortest:</a> Length{" "}
-											{combo.shortest.length}; spread
-											{combo.shortest.length - (i + state.min_combo_length)};
-											starting at{" "}
-											<a href={`#${combo.shortest.idx}`}>
-												spell #{combo.shortest.idx + 1}
-											</a>
-										</li>
-									</ul>
-								)}
-							</li>
-						))}
-					</ul>
-				) : null}
+                {Object.keys(state.combos).length > 0 ? (
+                    <ul>
+                        {Object.values(state.combos).map((combo, i) => (
+                            <li className="combo-listitem">
+                                <b>{i + state.min_combo_length}x Combo</b>
+                                {combo.shortest.idx === -1 ? (
+                                    <ul>
+                                        <li>No combo of this length</li>
+                                    </ul>
+                                ) : (
+                                    <ul>
+                                        {combo.first.idx === -1 ? (
+                                            <li>
+                                                No combo of this length with spread &lt;={" "}
+                                                {state.max_spread}
+                                            </li>
+                                        ) : (
+                                            <li>
+                                                <a href={`#${combo.first.idx}`}>Earliest:</a> Length
+                                                {combo.first.length}; spread{" "}
+                                                {combo.first.length - (i + state.min_combo_length)};
+                                                starting at
+                                                <a href={`#${combo.first.idx}`}>
+                                                    spell #{combo.first.idx + 1}
+                                                </a>
+                                            </li>
+                                        )}
+                                        <li>
+                                            <a href={`#${combo.shortest.idx}`}>Shortest:</a> Length{" "}
+                                            {combo.shortest.length}; spread
+                                            {combo.shortest.length - (i + state.min_combo_length)};
+                                            starting at{" "}
+                                            <a href={`#${combo.shortest.idx}`}>
+                                                spell #{combo.shortest.idx + 1}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                ) : null}
 
-				<hr />
+                <hr />
 
-				<label>Lookahead length</label>
-				<input
-					type="number"
-					value={state.lookahead}
-					onChange={(e) => state.update(() => ({ lookahead: +e.target.value }))}
-					min={10}
-					max={1000}
-				/>
+                <label>Lookahead length</label>
+                <input
+                    type="number"
+                    value={state.lookahead}
+                    onChange={(e) => state.update(() => ({ lookahead: +e.target.value }))}
+                    min={10}
+                    max={1000}
+                />
 
-				<hr />
+                <hr />
 
-				<label>Min Combo</label>
-				<input
-					type="number"
-					value={state.min_combo_length}
-					onChange={(e) =>
-						state.update(() => ({ min_combo_length: +e.target.value }))
-					}
-					min={1}
-					max={16}
-				/>
+                <label>Min Combo</label>
+                <input
+                    type="number"
+                    value={state.min_combo_length}
+                    onChange={(e) =>
+                        state.update(() => ({ min_combo_length: +e.target.value }))
+                    }
+                    min={1}
+                    max={16}
+                />
 
-				<label>Max Combo</label>
-				<input
-					type="number"
-					value={state.max_combo_length}
-					onChange={(e) =>
-						state.update(() => ({ max_combo_length: +e.target.value }))
-					}
-					min={1}
-					max={16}
-				/>
+                <label>Max Combo</label>
+                <input
+                    type="number"
+                    value={state.max_combo_length}
+                    onChange={(e) =>
+                        state.update(() => ({ max_combo_length: +e.target.value }))
+                    }
+                    min={1}
+                    max={16}
+                />
 
-				<label>Max Spread</label>
-				<input
-					type="number"
-					value={state.max_spread}
-					onChange={(e) =>
-						state.update(() => ({ max_spread: +e.target.value }))
-					}
-					min={0}
-					max={99}
-				/>
+                <label>Max Spread</label>
+                <input
+                    type="number"
+                    value={state.max_spread}
+                    onChange={(e) =>
+                        state.update(() => ({ max_spread: +e.target.value }))
+                    }
+                    min={0}
+                    max={99}
+                />
 
-				<input
-					type="checkbox"
-					defaultChecked
-					checked={state.include_ef_in_sequence}
-					onChange={(e) =>
-						state.update(() => ({ include_ef_in_sequence: e.target.checked }))
-					}
-				/>
-				<label>Include Elder Frenzies</label>
+                <input
+                    type="checkbox"
+                    defaultChecked
+                    checked={state.include_ef_in_sequence}
+                    onChange={(e) =>
+                        state.update(() => ({ include_ef_in_sequence: e.target.checked }))
+                    }
+                />
+                <label>Include Elder Frenzies</label>
 
-				<input
-					type="checkbox"
-					defaultChecked
-					checked={state.skip_abominations}
-					onChange={(e) =>
-						state.update(() => ({ skip_abominations: e.target.checked }))
-					}
-				/>
-				<label>Skip Abominations</label>
+                <input
+                    type="checkbox"
+                    defaultChecked
+                    checked={state.skip_abominations}
+                    onChange={(e) =>
+                        state.update(() => ({ skip_abominations: e.target.checked }))
+                    }
+                />
+                <label>Skip Abominations</label>
 
-				<input
-					type="checkbox"
-					defaultChecked
-					checked={state.skip_edifices}
-					onChange={(e) =>
-						state.update(() => ({ skip_edifices: e.target.checked }))
-					}
-				/>
-				<label>Skip Spontaneous Edifices</label>
+                <input
+                    type="checkbox"
+                    defaultChecked
+                    checked={state.skip_edifices}
+                    onChange={(e) =>
+                        state.update(() => ({ skip_edifices: e.target.checked }))
+                    }
+                />
+                <label>Skip Spontaneous Edifices</label>
 
-				<hr />
+                <hr />
 
-				<label>Golden Cookies on screen</label>
-				<input
-					type="number"
-					value={state.on_screen_cookies}
-					onChange={(e) =>
-						state.update(() => ({ on_screen_cookies: +e.target.value }))
-					}
-					min={0}
-					max={10}
-				/>
+                <label>Golden Cookies on screen</label>
+                <input
+                    type="number"
+                    value={state.on_screen_cookies}
+                    onChange={(e) =>
+                        state.update(() => ({ on_screen_cookies: +e.target.value }))
+                    }
+                    min={0}
+                    max={10}
+                />
 
-				<input
-					type="checkbox"
-					defaultChecked
-					checked={state.dragonflight}
-					onChange={(e) =>
-						state.update(() => ({ dragonflight: e.target.checked }))
-					}
-				/>
-				<label>Dragonflight Buff Active</label>
+                <input
+                    type="checkbox"
+                    defaultChecked
+                    checked={state.dragonflight}
+                    onChange={(e) =>
+                        state.update(() => ({ dragonflight: e.target.checked }))
+                    }
+                />
+                <label>Dragonflight Buff Active</label>
 
-				{/*
+                {/*
         <input
           type="checkbox"
           defaultChecked
@@ -360,188 +362,188 @@ function App() {
         <label>Supreme Intellect Aura Active</label>
         */}
 
-				<hr />
+                <hr />
 
-				<button
-					className="md-raised md-primary"
-					onClick={() => functions.update_cookies()}
-				>
-					Apply Settings
-				</button>
-				<button
-					className="md-raised md-primary"
-					onClick={() => functions.cast_spell()}
-				>
-					Cast Spell
-				</button>
+                <button
+                    className="md-raised md-primary"
+                    onClick={() => functions.update_cookies()}
+                >
+                    Apply Settings
+                </button>
+                <button
+                    className="md-raised md-primary"
+                    onClick={() => functions.cast_spell()}
+                >
+                    Cast Spell
+                </button>
 
-				<hr />
+                <hr />
 
-				<div className="table">
-					<div className="table-col">
-						<div>
-							<div className="md-toolbar-tools">
-								<h1>Spell #</h1>
-							</div>
-						</div>
-						<div>
-							<ul>
-								<li className="md-no-sticky">
-									Relative to now (This ascension | All time)
-								</li>
-								{state.cookies.map((_, i) => (
-									<li className="md-2-line">
-										<div className="md-list-item-text">
-											<a id={String(i)}></a>
-											<h3>
-												{i +
-													1 +
-													" (" +
-													(state.spellsCastThisAscension + i + 1) +
-													" | " +
-													(state.spellsCastTotal + i + 1) +
-													")"}
-											</h3>
-										</div>
-									</li>
-								))}
-							</ul>
-						</div>
-					</div>
-					<div className="table-col">
-						<div className="md-hue-3">
-							<div className="md-toolbar-tools">
-								<h1>No Change</h1>
-							</div>
-						</div>
-						<div>
-							<ul>
-								<li className="md-no-sticky">
-									Season is not Easter or Valentines.
-								</li>
-								{state.cookies.map((cookie_list) => (
-									<li className="md-2-line">
-										<img
-											src={
-												cookie_list[0].wrath
-													? "img/WrathCookie.png"
-													: "img/GoldCookie.png"
-											}
-											className="md-avatar"
-											alt="Golden Cookie"
-										/>
-										<div
-											className={`md-list-item-text${cookie_list[0].noteworthy ? " highlightCombo" : ""}`}
-										>
-											<h3>{cookie_list[0].type}</h3>
-										</div>
-									</li>
-								))}
-							</ul>
-						</div>
-					</div>
-					<div className="table-col">
-						<div className="md-hue-3">
-							<div className="md-toolbar-tools">
-								<h1>One Change</h1>
-								<div style={{ flexGrow: 1 }}></div>
-								<div className="hide-column">
-									{/* Sadly not possible to look clean with md-checkbox as it doesn't resize. */}
-									<input
-										type="checkbox"
-										id="show"
-										ng-click="collapse_interface(3)"
-										checked
-									/>
-									<label>Show</label>
-								</div>
-							</div>
-						</div>
-						<div>
-							<ul>
-								<li className="md-no-sticky">
-									Season is Easter or Valentines.
-								</li>
-								{state.cookies.map((cookie_list) => (
-									<li className="md-2-line">
-										<img
-											src={
-												cookie_list[1].wrath
-													? "img/WrathCookie.png"
-													: "img/GoldCookie.png"
-											}
-											className="md-avatar"
-											alt="Golden Cookie"
-										/>
-										<div
-											className={`md-list-item-text${cookie_list[1].noteworthy ? " highlightCombo" : ""}`}
-										>
-											<h3>{cookie_list[1].type}</h3>
-										</div>
-									</li>
-								))}
-							</ul>
-						</div>
-					</div>
-					<div className="table-col">
-						<div className="md-hue-3">
-							<div className="md-toolbar-tools">
-								<h1>Gambler's Dream</h1>
-							</div>
-						</div>
-						<div>
-							<ul>
-								<li className="md-no-sticky">Gambler's Fever Dream</li>
-								{state.cookies.map((cookie_list) => (
-									<li className="md-2-line">
-										<img
-											src={
-												cookie_list[3].backfire
-													? "img/WrathCookie.png"
-													: "img/GoldCookie.png"
-											}
-											className="md-avatar"
-											alt="Golden Cookie"
-										/>
-										<div
-											className={`md-list-item-text${cookie_list[3].hasBs || cookie_list[3].hasEf ? " highlightCombo" : cookie_list[3].type == "Resurrect Abomination" || (cookie_list[3].type == "Spontaneous Edifice" && !cookie_list[3].backfire) ? " highlightSkip" : ""}`}
-										>
-											<h3
-												title={
-													cookie_list[3].innerCookie1?.type +
-													"; " +
-													cookie_list[3].innerCookie2?.type
-												}
-											>
-												{cookie_list[3] ? cookie_list[3].type : "Blank"}
-											</h3>
-										</div>
-									</li>
-								))}
-							</ul>
-						</div>
-					</div>
-				</div>
-				<button
-					className="md-raised md-primary"
-					onClick={() => functions.load_more()}
-				>
-					Load More
-				</button>
-			</div>
-			<pre
-				style={{
-					margin: "auto",
-					textAlign: "left",
-					overflow: "hidden",
-					wordWrap: "break-word",
-					whiteSpace: "pre-wrap",
-				}}
-			>
-				{JSON.stringify(state, null, 2)}
-			</pre>
-		</main>
-	);
+                <div className="table">
+                    <div className="table-col">
+                        <div>
+                            <div className="md-toolbar-tools">
+                                <h1>Spell #</h1>
+                            </div>
+                        </div>
+                        <div>
+                            <ul>
+                                <li className="md-no-sticky">
+                                    Relative to now (This ascension | All time)
+                                </li>
+                                {state.cookies.map((_, i) => (
+                                    <li className="md-2-line">
+                                        <div className="md-list-item-text">
+                                            <a id={String(i)}></a>
+                                            <h3>
+                                                {i +
+                                                    1 +
+                                                    " (" +
+                                                    (state.spellsCastThisAscension + i + 1) +
+                                                    " | " +
+                                                    (state.spellsCastTotal + i + 1) +
+                                                    ")"}
+                                            </h3>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="table-col">
+                        <div className="md-hue-3">
+                            <div className="md-toolbar-tools">
+                                <h1>No Change</h1>
+                            </div>
+                        </div>
+                        <div>
+                            <ul>
+                                <li className="md-no-sticky">
+                                    Season is not Easter or Valentines.
+                                </li>
+                                {state.cookies.map((cookie_list) => (
+                                    <li className="md-2-line">
+                                        <img
+                                            src={
+                                                cookie_list[0].wrath
+                                                    ? "img/WrathCookie.png"
+                                                    : "img/GoldCookie.png"
+                                            }
+                                            className="md-avatar"
+                                            alt="Golden Cookie"
+                                        />
+                                        <div
+                                            className={`md-list-item-text${cookie_list[0].noteworthy ? " highlightCombo" : ""}`}
+                                        >
+                                            <h3>{cookie_list[0].type}</h3>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="table-col">
+                        <div className="md-hue-3">
+                            <div className="md-toolbar-tools">
+                                <h1>One Change</h1>
+                                <div style={{ flexGrow: 1 }}></div>
+                                <div className="hide-column">
+                                    {/* Sadly not possible to look clean with md-checkbox as it doesn't resize. */}
+                                    <input
+                                        type="checkbox"
+                                        id="show"
+                                        ng-click="collapse_interface(3)"
+                                        checked
+                                    />
+                                    <label>Show</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <ul>
+                                <li className="md-no-sticky">
+                                    Season is Easter or Valentines.
+                                </li>
+                                {state.cookies.map((cookie_list) => (
+                                    <li className="md-2-line">
+                                        <img
+                                            src={
+                                                cookie_list[1].wrath
+                                                    ? "img/WrathCookie.png"
+                                                    : "img/GoldCookie.png"
+                                            }
+                                            className="md-avatar"
+                                            alt="Golden Cookie"
+                                        />
+                                        <div
+                                            className={`md-list-item-text${cookie_list[1].noteworthy ? " highlightCombo" : ""}`}
+                                        >
+                                            <h3>{cookie_list[1].type}</h3>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                    <div className="table-col">
+                        <div className="md-hue-3">
+                            <div className="md-toolbar-tools">
+                                <h1>Gambler's Dream</h1>
+                            </div>
+                        </div>
+                        <div>
+                            <ul>
+                                <li className="md-no-sticky">Gambler's Fever Dream</li>
+                                {state.cookies.map((cookie_list) => (
+                                    <li className="md-2-line">
+                                        <img
+                                            src={
+                                                cookie_list[3].backfire
+                                                    ? "img/WrathCookie.png"
+                                                    : "img/GoldCookie.png"
+                                            }
+                                            className="md-avatar"
+                                            alt="Golden Cookie"
+                                        />
+                                        <div
+                                            className={`md-list-item-text${cookie_list[3].hasBs || cookie_list[3].hasEf ? " highlightCombo" : cookie_list[3].type == "Resurrect Abomination" || (cookie_list[3].type == "Spontaneous Edifice" && !cookie_list[3].backfire) ? " highlightSkip" : ""}`}
+                                        >
+                                            <h3
+                                                title={
+                                                    cookie_list[3].innerCookie1?.type +
+                                                    "; " +
+                                                    cookie_list[3].innerCookie2?.type
+                                                }
+                                            >
+                                                {cookie_list[3] ? cookie_list[3].type : "Blank"}
+                                            </h3>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <button
+                    className="md-raised md-primary"
+                    onClick={() => functions.load_more()}
+                >
+                    Load More
+                </button>
+            </div>
+            <pre
+                style={{
+                    margin: "auto",
+                    textAlign: "left",
+                    overflow: "hidden",
+                    wordWrap: "break-word",
+                    whiteSpace: "pre-wrap",
+                }}
+            >
+                {JSON.stringify(state, null, 2)}
+            </pre>
+        </main>
+    );
 }
 
 export default App;
