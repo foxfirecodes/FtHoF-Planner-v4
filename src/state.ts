@@ -430,3 +430,17 @@ export function useFunctions() {
 
   return { load_more, cast_spell, load_game, update_cookies, check_cookies };
 }
+
+export function isGamblerSpellNoteworthy(spell: GamblerSpell) {
+  return spell.hasBs || spell.hasEf;
+}
+
+export function isGamblerSpellSkip(spell: GamblerSpell) {
+  if (spell.type === "Resurrect Abomination") {
+    return true;
+  }
+  if (spell.type === "Spontaneous Edifice") {
+    return !spell.backfire;
+  }
+  return false;
+}

@@ -1,6 +1,12 @@
 import { cva } from "class-variance-authority";
-import { useFunctions, useStateStore } from "./state";
+import {
+  isGamblerSpellNoteworthy,
+  isGamblerSpellSkip,
+  useFunctions,
+  useStateStore,
+} from "./state";
 import React from "react";
+import { CookieImage } from "./components/CookieImage";
 
 const btn = cva(
   "max-w-max cursor-pointer px-3 py-2 rounded-xl transition-all hover:-translate-y-0.5 hover:scale-[101%] active:scale-[99%] active:translate-0",
@@ -32,6 +38,15 @@ const gridCell = cva(
   "flex items-center gap-2 px-2 py-1 even:bg-neutral-100 border-b border-neutral-300",
 );
 
+const highlight = cva(undefined, {
+  variants: {
+    type: {
+      noteworthy: "bg-emerald-300/50",
+      skip: "bg-rose-300/50",
+    },
+  },
+});
+
 function App() {
   const state = useStateStore();
   const functions = useFunctions();
@@ -40,12 +55,12 @@ function App() {
 
   return (
     <main className="grid grid-rows-[auto_1fr] min-h-screen max-w-screen @container gap-8 bg-neutral-50 text-neutral-900">
-      <div className="p-4 bg-primary-200 w-full max-w-4xl mx-auto transition-all @4xl:rounded-4xl @4xl:px-8">
+      <div className="p-4 bg-primary-200 w-full max-w-6xl mx-auto transition-all @6xl:rounded-4xl @4xl:px-8">
         <h1 className="text-neutral-800 text-xl font-semibold">
           Cookie Clicker FtHoF Planner v4
         </h1>
       </div>
-      <div className="max-w-4xl w-full mx-auto px-4 flex flex-col gap-8">
+      <div className="max-w-6xl w-full mx-auto px-4 flex flex-col gap-8">
         <div className="flex flex-col gap-2">
           <div className="flex flex-col gap-1">
             <label className="text-neutral-700 text-sm">Save Code</label>
@@ -399,21 +414,21 @@ function App() {
                       </li>
                     ) : (
                       <li>
-                        <a href={`#${combo.first.idx}`}>Earliest:</a> Length{" "}
+                        <a href={`#${combo.first.idx + 1}`}>Earliest:</a> Length{" "}
                         {combo.first.length}; spread{" "}
                         {combo.first.length - (i + state.min_combo_length)};
                         starting at{" "}
-                        <a href={`#${combo.first.idx}`}>
+                        <a href={`#${combo.first.idx + 1}`}>
                           spell #{combo.first.idx + 1}
                         </a>
                       </li>
                     )}
                     <li>
-                      <a href={`#${combo.shortest.idx}`}>Shortest:</a> Length{" "}
-                      {combo.shortest.length}; spread{" "}
+                      <a href={`#${combo.shortest.idx + 1}`}>Shortest:</a>{" "}
+                      Length {combo.shortest.length}; spread{" "}
                       {combo.shortest.length - (i + state.min_combo_length)};
                       starting at{" "}
-                      <a href={`#${combo.shortest.idx}`}>
+                      <a href={`#${combo.shortest.idx + 1}`}>
                         spell #{combo.shortest.idx + 1}
                       </a>
                     </li>
@@ -453,58 +468,59 @@ function App() {
           {state.cookies.map((cookie_list, i) => (
             <React.Fragment key={i}>
               <div className={gridCell()}>
-                <div className="md-list-item-text">
-                  <a id={String(i)}></a>
-                  <h3>
-                    {`${
-                      i + 1
-                    } (${state.spellsCastThisAscension + i + 1} | ${state.spellsCastTotal + i + 1})`}
-                  </h3>
-                </div>
+                <a id={String(i + 1)}>
+                  {`${
+                    i + 1
+                  } (${state.spellsCastThisAscension + i + 1} | ${state.spellsCastTotal + i + 1})`}
+                </a>
               </div>
               <div className={gridCell()}>
-                <img
-                  src={
-                    cookie_list[0].wrath
-                      ? "img/WrathCookie.png"
-                      : "img/GoldCookie.png"
+                <CookieImage type={cookie_list[0].wrath ? "wrath" : "golden"} />
+                <span
+                  className={
+                    cookie_list[0].noteworthy
+                      ? highlight({ type: "noteworthy" })
+                      : undefined
                   }
-                  width={40}
-                />
-                <span>{cookie_list[0].type}</span>
-              </div>
-              <div className={gridCell()}>
-                <img
-                  src={
-                    cookie_list[1].wrath
-                      ? "img/WrathCookie.png"
-                      : "img/GoldCookie.png"
-                  }
-                  width={40}
-                />
-                <span>{cookie_list[1].type}</span>
-              </div>
-              <div className={gridCell()}>
-                <img
-                  src={
-                    cookie_list[3].backfire
-                      ? "img/WrathCookie.png"
-                      : "img/GoldCookie.png"
-                  }
-                  width={40}
-                />
-                <div
-                  className={`md-list-item-text${cookie_list[3].hasBs || cookie_list[3].hasEf ? " highlightCombo" : cookie_list[3].type == "Resurrect Abomination" || (cookie_list[3].type == "Spontaneous Edifice" && !cookie_list[3].backfire) ? " highlightSkip" : ""}`}
                 >
-                  <h3
-                    title={
-                      cookie_list[3].innerCookie1?.type +
-                      "; " +
-                      cookie_list[3].innerCookie2?.type
-                    }
+                  {cookie_list[0].type}
+                </span>
+              </div>
+              <div className={gridCell()}>
+                <CookieImage type={cookie_list[1].wrath ? "wrath" : "golden"} />
+                <span
+                  className={
+                    cookie_list[1].noteworthy
+                      ? highlight({ type: "noteworthy" })
+                      : undefined
+                  }
+                >
+                  {cookie_list[1].type}
+                </span>
+              </div>
+              <div className={gridCell()}>
+                <CookieImage
+                  type={cookie_list[3].backfire ? "wrath" : "golden"}
+                />
+                <div className="flex flex-col gap-1">
+                  <span
+                    className={highlight({
+                      type: isGamblerSpellNoteworthy(cookie_list[3])
+                        ? "noteworthy"
+                        : isGamblerSpellSkip(cookie_list[3])
+                          ? "skip"
+                          : undefined,
+                    })}
                   >
                     {cookie_list[3] ? cookie_list[3].type : "Blank"}
-                  </h3>
+                  </span>
+                  {cookie_list[3].innerCookie1 != null &&
+                  cookie_list[3].innerCookie2 != null ? (
+                    <span className="text-neutral-900">
+                      {cookie_list[3].innerCookie1.type},{" "}
+                      {cookie_list[3].innerCookie2.type}
+                    </span>
+                  ) : null}
                 </div>
               </div>
             </React.Fragment>
