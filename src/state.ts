@@ -149,7 +149,7 @@ export function useFunctions() {
     for (let i = 0; i < state.lookahead; i++) {
       const cookie1 = check_cookies(state.spellsCastTotal + i, "", false);
       const cookie2 = check_cookies(state.spellsCastTotal + i, "", true);
-      const cookie3 = check_cookies(state.spellsCastTotal + i, "", true);
+      // const cookie3 = check_cookies(state.spellsCastTotal + i, "", true);
       const gambler = check_gambler(state.spellsCastTotal + i);
       cookies.push([
         cookie1,
@@ -429,4 +429,18 @@ export function useFunctions() {
   }
 
   return { load_more, cast_spell, load_game, update_cookies, check_cookies };
+}
+
+export function isGamblerSpellNoteworthy(spell: GamblerSpell) {
+  return spell.hasBs || spell.hasEf;
+}
+
+export function isGamblerSpellSkip(spell: GamblerSpell) {
+  if (spell.type === "Resurrect Abomination") {
+    return true;
+  }
+  if (spell.type === "Spontaneous Edifice") {
+    return !spell.backfire;
+  }
+  return false;
 }
