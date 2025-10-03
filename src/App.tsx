@@ -1,4 +1,5 @@
 import { cva } from "class-variance-authority";
+import { clsx } from "clsx";
 import {
   isGamblerSpellNoteworthy,
   isGamblerSpellSkip,
@@ -475,10 +476,6 @@ function App() {
             <p className={columnHeaderSubtitle()}>
               Season is Easter or Valentines
             </p>
-            <div>
-              <input type="checkbox" checked />
-              <label>Show</label>
-            </div>
           </div>
           <div className={columnHeader()}>
             <h1 className={columnHeaderTitle()}>Gambler's Dream</h1>
@@ -522,13 +519,16 @@ function App() {
                 />
                 <div className="flex flex-col gap-1">
                   <span
-                    className={highlight({
-                      type: isGamblerSpellNoteworthy(cookie_list[3])
-                        ? "noteworthy"
-                        : isGamblerSpellSkip(cookie_list[3])
-                          ? "skip"
-                          : undefined,
-                    })}
+                    className={clsx(
+                      "text-neutral-500 text-sm",
+                      highlight({
+                        type: isGamblerSpellNoteworthy(cookie_list[3])
+                          ? "noteworthy"
+                          : isGamblerSpellSkip(cookie_list[3])
+                            ? "skip"
+                            : undefined,
+                      }),
+                    )}
                   >
                     {cookie_list[3] ? cookie_list[3].type : "Blank"}
                   </span>
