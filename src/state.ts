@@ -149,7 +149,7 @@ export function useFunctions() {
     for (let i = 0; i < state.lookahead; i++) {
       const cookie1 = check_cookies(state.spellsCastTotal + i, "", false);
       const cookie2 = check_cookies(state.spellsCastTotal + i, "", true);
-      const cookie3 = check_cookies(state.spellsCastTotal + i, "", true);
+      // const cookie3 = check_cookies(state.spellsCastTotal + i, "", true);
       const gambler = check_gambler(state.spellsCastTotal + i);
       cookies.push([
         cookie1,

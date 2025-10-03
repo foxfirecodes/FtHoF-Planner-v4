@@ -52,6 +52,7 @@ function App() {
   const state = useStateStore();
   const functions = useFunctions();
 
+  // @ts-expect-error this is temporary
   window.APP = { state, functions };
 
   return (
