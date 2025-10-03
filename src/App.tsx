@@ -1,5 +1,36 @@
-import "./App.css";
+import { cva } from "class-variance-authority";
 import { useFunctions, useStateStore } from "./state";
+import React from "react";
+
+const btn = cva(
+  "max-w-max cursor-pointer px-3 py-2 rounded-xl transition-all hover:-translate-y-0.5 hover:scale-[101%] active:scale-[99%] active:translate-0",
+  {
+    variants: {
+      color: {
+        primary:
+          "bg-primary-700 hover:bg-primary-600 active:bg-primary-800  text-neutral-200",
+        secondary:
+          "bg-neutral-600 hover:bg-neutral-500 active:bg-neutral-700 text-neutral-200",
+      },
+    },
+    defaultVariants: {
+      color: "secondary",
+    },
+  },
+);
+
+const input = cva(
+  "transition-all bg-neutral-50 border border-neutral-500 hover:border-primary-300 focus-visible:border-primary-500 focus-visible:outline-2 focus-visible:outline-primary-600 rounded-xl px-3 py-2",
+);
+
+const columnHeader = cva(
+  "border-b border-neutral-700 px-2 py-1 even:bg-neutral-100",
+);
+const columnHeaderTitle = cva("text-lg font-medium text-neutral-800");
+const columnHeaderSubtitle = cva("text-sm text-neutral-600");
+const gridCell = cva(
+  "flex items-center gap-2 px-2 py-1 even:bg-neutral-100 border-b border-neutral-300",
+);
 
 function App() {
   const state = useStateStore();
@@ -8,17 +39,18 @@ function App() {
   window.APP = { state, functions };
 
   return (
-    <main>
-      <div className="md-toolbar-tools">
-        <h1>
-          <span>Cookie Clicker FtHoF Planner v4</span>
+    <main className="grid grid-rows-[auto_1fr] min-h-screen max-w-screen @container gap-8 bg-neutral-50 text-neutral-900">
+      <div className="p-4 bg-primary-200 w-full max-w-4xl mx-auto transition-all @4xl:rounded-4xl @4xl:px-8">
+        <h1 className="text-neutral-800 text-xl font-semibold">
+          Cookie Clicker FtHoF Planner v4
         </h1>
       </div>
-      <div className="content">
-        <div>
-          <div>
-            <label>Save Code</label>
+      <div className="max-w-4xl w-full mx-auto px-4 flex flex-col gap-8">
+        <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-1">
+            <label className="text-neutral-700 text-sm">Save Code</label>
             <input
+              className={input()}
               value={state.save_string}
               onChange={(e) =>
                 state.update(() => ({ save_string: e.target.value }))
@@ -26,7 +58,7 @@ function App() {
             />
           </div>
           <button
-            className="md-raised md-primary"
+            className={btn({ color: "primary" })}
             onClick={() => functions.load_game()}
           >
             Import Save
@@ -206,7 +238,148 @@ function App() {
 
         */}
 
-        <hr />
+        <div className="bg-neutral-500/10 p-4 rounded-xl flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <label>Lookahead length</label>
+            <input
+              className={input()}
+              type="number"
+              value={state.lookahead}
+              onChange={(e) =>
+                state.update(() => ({ lookahead: +e.target.value }))
+              }
+              min={10}
+              max={1000}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label>Min Combo</label>
+            <input
+              className={input()}
+              type="number"
+              value={state.min_combo_length}
+              onChange={(e) =>
+                state.update(() => ({ min_combo_length: +e.target.value }))
+              }
+              min={1}
+              max={16}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label>Max Combo</label>
+            <input
+              className={input()}
+              type="number"
+              value={state.max_combo_length}
+              onChange={(e) =>
+                state.update(() => ({ max_combo_length: +e.target.value }))
+              }
+              min={1}
+              max={16}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label>Max Spread</label>
+            <input
+              className={input()}
+              type="number"
+              value={state.max_spread}
+              onChange={(e) =>
+                state.update(() => ({ max_spread: +e.target.value }))
+              }
+              min={0}
+              max={99}
+            />
+          </div>
+
+          <div className="flex flex-col gap-1">
+            <label>Golden Cookies on screen</label>
+            <input
+              className={input()}
+              type="number"
+              value={state.on_screen_cookies}
+              onChange={(e) =>
+                state.update(() => ({ on_screen_cookies: +e.target.value }))
+              }
+              min={0}
+              max={10}
+            />
+          </div>
+
+          <div className="flex gap-1">
+            <input
+              type="checkbox"
+              defaultChecked
+              checked={state.include_ef_in_sequence}
+              onChange={(e) =>
+                state.update(() => ({
+                  include_ef_in_sequence: e.target.checked,
+                }))
+              }
+            />
+            <label>Include Elder Frenzies</label>
+          </div>
+
+          <div className="flex gap-1">
+            <input
+              type="checkbox"
+              defaultChecked
+              checked={state.skip_abominations}
+              onChange={(e) =>
+                state.update(() => ({ skip_abominations: e.target.checked }))
+              }
+            />
+            <label>Skip Abominations</label>
+          </div>
+
+          <div className="flex gap-1">
+            <input
+              type="checkbox"
+              defaultChecked
+              checked={state.skip_edifices}
+              onChange={(e) =>
+                state.update(() => ({ skip_edifices: e.target.checked }))
+              }
+            />
+            <label>Skip Spontaneous Edifices</label>
+          </div>
+
+          <div className="flex gap-1">
+            <input
+              type="checkbox"
+              defaultChecked
+              checked={state.dragonflight}
+              onChange={(e) =>
+                state.update(() => ({ dragonflight: e.target.checked }))
+              }
+            />
+            <label>Dragonflight Buff Active</label>
+          </div>
+
+          {/*
+          <input
+          type="checkbox"
+          defaultChecked
+          checked={state.supremeintellect}
+          onChange={(e) =>
+              state.update(() => ({ supremeintellect: e.target.checked }))
+          }
+          />
+          <label>Supreme Intellect Aura Active</label>
+          */}
+        </div>
+
+        <div className="flex items-center gap-4">
+          <button className={btn()} onClick={() => functions.update_cookies()}>
+            Apply Settings
+          </button>
+          <button className={btn()} onClick={() => functions.cast_spell()}>
+            Cast Spell
+          </button>
+        </div>
 
         {Object.keys(state.combos).length > 0 ? (
           <ul>
@@ -226,10 +399,10 @@ function App() {
                       </li>
                     ) : (
                       <li>
-                        <a href={`#${combo.first.idx}`}>Earliest:</a> Length
+                        <a href={`#${combo.first.idx}`}>Earliest:</a> Length{" "}
                         {combo.first.length}; spread{" "}
                         {combo.first.length - (i + state.min_combo_length)};
-                        starting at
+                        starting at{" "}
                         <a href={`#${combo.first.idx}`}>
                           spell #{combo.first.idx + 1}
                         </a>
@@ -237,7 +410,7 @@ function App() {
                     )}
                     <li>
                       <a href={`#${combo.shortest.idx}`}>Shortest:</a> Length{" "}
-                      {combo.shortest.length}; spread
+                      {combo.shortest.length}; spread{" "}
                       {combo.shortest.length - (i + state.min_combo_length)};
                       starting at{" "}
                       <a href={`#${combo.shortest.idx}`}>
@@ -251,297 +424,96 @@ function App() {
           </ul>
         ) : null}
 
-        <hr />
-
-        <label>Lookahead length</label>
-        <input
-          type="number"
-          value={state.lookahead}
-          onChange={(e) => state.update(() => ({ lookahead: +e.target.value }))}
-          min={10}
-          max={1000}
-        />
-
-        <hr />
-
-        <label>Min Combo</label>
-        <input
-          type="number"
-          value={state.min_combo_length}
-          onChange={(e) =>
-            state.update(() => ({ min_combo_length: +e.target.value }))
-          }
-          min={1}
-          max={16}
-        />
-
-        <label>Max Combo</label>
-        <input
-          type="number"
-          value={state.max_combo_length}
-          onChange={(e) =>
-            state.update(() => ({ max_combo_length: +e.target.value }))
-          }
-          min={1}
-          max={16}
-        />
-
-        <label>Max Spread</label>
-        <input
-          type="number"
-          value={state.max_spread}
-          onChange={(e) =>
-            state.update(() => ({ max_spread: +e.target.value }))
-          }
-          min={0}
-          max={99}
-        />
-
-        <input
-          type="checkbox"
-          defaultChecked
-          checked={state.include_ef_in_sequence}
-          onChange={(e) =>
-            state.update(() => ({ include_ef_in_sequence: e.target.checked }))
-          }
-        />
-        <label>Include Elder Frenzies</label>
-
-        <input
-          type="checkbox"
-          defaultChecked
-          checked={state.skip_abominations}
-          onChange={(e) =>
-            state.update(() => ({ skip_abominations: e.target.checked }))
-          }
-        />
-        <label>Skip Abominations</label>
-
-        <input
-          type="checkbox"
-          defaultChecked
-          checked={state.skip_edifices}
-          onChange={(e) =>
-            state.update(() => ({ skip_edifices: e.target.checked }))
-          }
-        />
-        <label>Skip Spontaneous Edifices</label>
-
-        <hr />
-
-        <label>Golden Cookies on screen</label>
-        <input
-          type="number"
-          value={state.on_screen_cookies}
-          onChange={(e) =>
-            state.update(() => ({ on_screen_cookies: +e.target.value }))
-          }
-          min={0}
-          max={10}
-        />
-
-        <input
-          type="checkbox"
-          defaultChecked
-          checked={state.dragonflight}
-          onChange={(e) =>
-            state.update(() => ({ dragonflight: e.target.checked }))
-          }
-        />
-        <label>Dragonflight Buff Active</label>
-
-        {/*
-        <input
-          type="checkbox"
-          defaultChecked
-          checked={state.supremeintellect}
-          onChange={(e) =>
-            state.update(() => ({ supremeintellect: e.target.checked }))
-          }
-        />
-        <label>Supreme Intellect Aura Active</label>
-        */}
-
-        <hr />
-
-        <button
-          className="md-raised md-primary"
-          onClick={() => functions.update_cookies()}
-        >
-          Apply Settings
-        </button>
-        <button
-          className="md-raised md-primary"
-          onClick={() => functions.cast_spell()}
-        >
-          Cast Spell
-        </button>
-
-        <hr />
-
-        <div className="table">
-          <div className="table-col">
+        <div className="grid grid-cols-4">
+          <div className={columnHeader()}>
+            <h3 className={columnHeaderTitle()}>Spell #</h3>
+            <p className={columnHeaderSubtitle()}>
+              Relative to now (This acension | All time)
+            </p>
+          </div>
+          <div className={columnHeader()}>
+            <h3 className={columnHeaderTitle()}>No Change</h3>
+            <p className={columnHeaderSubtitle()}>
+              Season is not Easter or Valentines
+            </p>
+          </div>
+          <div className={columnHeader()}>
+            <h3 className={columnHeaderTitle()}>One Change</h3>
+            <p className={columnHeaderSubtitle()}>
+              Season is Easter or Valentines
+            </p>
             <div>
-              <div className="md-toolbar-tools">
-                <h1>Spell #</h1>
-              </div>
-            </div>
-            <div>
-              <ul>
-                <li className="md-no-sticky">
-                  Relative to now (This ascension | All time)
-                </li>
-                {state.cookies.map((_, i) => (
-                  <li className="md-2-line">
-                    <div className="md-list-item-text">
-                      <a id={String(i)}></a>
-                      <h3>
-                        {i +
-                          1 +
-                          " (" +
-                          (state.spellsCastThisAscension + i + 1) +
-                          " | " +
-                          (state.spellsCastTotal + i + 1) +
-                          ")"}
-                      </h3>
-                    </div>
-                  </li>
-                ))}
-              </ul>
+              <input type="checkbox" checked />
+              <label>Show</label>
             </div>
           </div>
-          <div className="table-col">
-            <div className="md-hue-3">
-              <div className="md-toolbar-tools">
-                <h1>No Change</h1>
-              </div>
-            </div>
-            <div>
-              <ul>
-                <li className="md-no-sticky">
-                  Season is not Easter or Valentines.
-                </li>
-                {state.cookies.map((cookie_list) => (
-                  <li className="md-2-line">
-                    <img
-                      src={
-                        cookie_list[0].wrath
-                          ? "img/WrathCookie.png"
-                          : "img/GoldCookie.png"
-                      }
-                      className="md-avatar"
-                      alt="Golden Cookie"
-                    />
-                    <div
-                      className={`md-list-item-text${cookie_list[0].noteworthy ? " highlightCombo" : ""}`}
-                    >
-                      <h3>{cookie_list[0].type}</h3>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
+          <div className={columnHeader()}>
+            <h1 className={columnHeaderTitle()}>Gambler's Dream</h1>
           </div>
-          <div className="table-col">
-            <div className="md-hue-3">
-              <div className="md-toolbar-tools">
-                <h1>One Change</h1>
-                <div style={{ flexGrow: 1 }}></div>
-                <div className="hide-column">
-                  {/* Sadly not possible to look clean with md-checkbox as it doesn't resize. */}
-                  <input
-                    type="checkbox"
-                    id="show"
-                    ng-click="collapse_interface(3)"
-                    checked
-                  />
-                  <label>Show</label>
+          {state.cookies.map((cookie_list, i) => (
+            <React.Fragment key={i}>
+              <div className={gridCell()}>
+                <div className="md-list-item-text">
+                  <a id={String(i)}></a>
+                  <h3>
+                    {`${
+                      i + 1
+                    } (${state.spellsCastThisAscension + i + 1} | ${state.spellsCastTotal + i + 1})`}
+                  </h3>
                 </div>
               </div>
-            </div>
-            <div>
-              <ul>
-                <li className="md-no-sticky">
-                  Season is Easter or Valentines.
-                </li>
-                {state.cookies.map((cookie_list) => (
-                  <li className="md-2-line">
-                    <img
-                      src={
-                        cookie_list[1].wrath
-                          ? "img/WrathCookie.png"
-                          : "img/GoldCookie.png"
-                      }
-                      className="md-avatar"
-                      alt="Golden Cookie"
-                    />
-                    <div
-                      className={`md-list-item-text${cookie_list[1].noteworthy ? " highlightCombo" : ""}`}
-                    >
-                      <h3>{cookie_list[1].type}</h3>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <div className="table-col">
-            <div className="md-hue-3">
-              <div className="md-toolbar-tools">
-                <h1>Gambler's Dream</h1>
+              <div className={gridCell()}>
+                <img
+                  src={
+                    cookie_list[0].wrath
+                      ? "img/WrathCookie.png"
+                      : "img/GoldCookie.png"
+                  }
+                  width={40}
+                />
+                <span>{cookie_list[0].type}</span>
               </div>
-            </div>
-            <div>
-              <ul>
-                <li className="md-no-sticky">Gambler's Fever Dream</li>
-                {state.cookies.map((cookie_list) => (
-                  <li className="md-2-line">
-                    <img
-                      src={
-                        cookie_list[3].backfire
-                          ? "img/WrathCookie.png"
-                          : "img/GoldCookie.png"
-                      }
-                      className="md-avatar"
-                      alt="Golden Cookie"
-                    />
-                    <div
-                      className={`md-list-item-text${cookie_list[3].hasBs || cookie_list[3].hasEf ? " highlightCombo" : cookie_list[3].type == "Resurrect Abomination" || (cookie_list[3].type == "Spontaneous Edifice" && !cookie_list[3].backfire) ? " highlightSkip" : ""}`}
-                    >
-                      <h3
-                        title={
-                          cookie_list[3].innerCookie1?.type +
-                          "; " +
-                          cookie_list[3].innerCookie2?.type
-                        }
-                      >
-                        {cookie_list[3] ? cookie_list[3].type : "Blank"}
-                      </h3>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+              <div className={gridCell()}>
+                <img
+                  src={
+                    cookie_list[1].wrath
+                      ? "img/WrathCookie.png"
+                      : "img/GoldCookie.png"
+                  }
+                  width={40}
+                />
+                <span>{cookie_list[1].type}</span>
+              </div>
+              <div className={gridCell()}>
+                <img
+                  src={
+                    cookie_list[3].backfire
+                      ? "img/WrathCookie.png"
+                      : "img/GoldCookie.png"
+                  }
+                  width={40}
+                />
+                <div
+                  className={`md-list-item-text${cookie_list[3].hasBs || cookie_list[3].hasEf ? " highlightCombo" : cookie_list[3].type == "Resurrect Abomination" || (cookie_list[3].type == "Spontaneous Edifice" && !cookie_list[3].backfire) ? " highlightSkip" : ""}`}
+                >
+                  <h3
+                    title={
+                      cookie_list[3].innerCookie1?.type +
+                      "; " +
+                      cookie_list[3].innerCookie2?.type
+                    }
+                  >
+                    {cookie_list[3] ? cookie_list[3].type : "Blank"}
+                  </h3>
+                </div>
+              </div>
+            </React.Fragment>
+          ))}
         </div>
-        <button
-          className="md-raised md-primary"
-          onClick={() => functions.load_more()}
-        >
+        <button className={btn()} onClick={() => functions.load_more()}>
           Load More
         </button>
       </div>
-      <pre
-        style={{
-          margin: "auto",
-          textAlign: "left",
-          overflow: "hidden",
-          wordWrap: "break-word",
-          whiteSpace: "pre-wrap",
-        }}
-      >
-        {JSON.stringify(state, null, 2)}
-      </pre>
     </main>
   );
 }
