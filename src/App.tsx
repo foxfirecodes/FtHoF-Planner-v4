@@ -414,21 +414,37 @@ function App() {
                       </li>
                     ) : (
                       <li>
-                        <a href={`#${combo.first.idx + 1}`}>Earliest:</a> Length{" "}
-                        {combo.first.length}; spread{" "}
+                        <a
+                          href={`#${combo.first.idx + 1}`}
+                          className="text-blue-500 underline"
+                        >
+                          Earliest:
+                        </a>{" "}
+                        Length {combo.first.length}; spread{" "}
                         {combo.first.length - (i + state.min_combo_length)};
                         starting at{" "}
-                        <a href={`#${combo.first.idx + 1}`}>
+                        <a
+                          href={`#${combo.first.idx + 1}`}
+                          className="text-blue-500 underline"
+                        >
                           spell #{combo.first.idx + 1}
                         </a>
                       </li>
                     )}
                     <li>
-                      <a href={`#${combo.shortest.idx + 1}`}>Shortest:</a>{" "}
+                      <a
+                        href={`#${combo.shortest.idx + 1}`}
+                        className="text-blue-500 underline"
+                      >
+                        Shortest:
+                      </a>{" "}
                       Length {combo.shortest.length}; spread{" "}
                       {combo.shortest.length - (i + state.min_combo_length)};
                       starting at{" "}
-                      <a href={`#${combo.shortest.idx + 1}`}>
+                      <a
+                        href={`#${combo.shortest.idx + 1}`}
+                        className="text-blue-500 underline"
+                      >
                         spell #{combo.shortest.idx + 1}
                       </a>
                     </li>
