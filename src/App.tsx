@@ -255,7 +255,7 @@ function App() {
 
         <div className="bg-neutral-500/10 p-4 rounded-xl flex flex-col gap-3">
           <div className="flex flex-col gap-1">
-            <label>Lookahead length</label>
+            <label className="text-neutral-700 text-sm">Lookahead length</label>
             <input
               className={input()}
               type="number"
@@ -269,7 +269,7 @@ function App() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label>Min Combo</label>
+            <label className="text-neutral-700 text-sm">Min Combo</label>
             <input
               className={input()}
               type="number"
@@ -283,7 +283,7 @@ function App() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label>Max Combo</label>
+            <label className="text-neutral-700 text-sm">Max Combo</label>
             <input
               className={input()}
               type="number"
@@ -297,7 +297,7 @@ function App() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label>Max Spread</label>
+            <label className="text-neutral-700 text-sm">Max Spread</label>
             <input
               className={input()}
               type="number"
@@ -311,7 +311,9 @@ function App() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label>Golden Cookies on screen</label>
+            <label className="text-neutral-700 text-sm">
+              Golden Cookies on screen
+            </label>
             <input
               className={input()}
               type="number"
