@@ -10,7 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: |
+      - name: install & build
+        env:
+          VITE_BASE: "/FtHoF-Planner-V4/"
+        run: |
           bun install
           bun run build
       - id: deployment
@@ -30,5 +33,3 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
-        env:
-          VITE_BASE: "/FtHoF-Planner-V4/"
